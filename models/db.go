@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"context"
@@ -11,8 +11,9 @@ import (
 )
 
 var client *mongo.Client
+var db *mongo.Database
 
-func connectDB() {
+func ConnectToDB() {
 	var err error
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
 	client, err = mongo.Connect(context.TODO(), clientOptions)
@@ -25,5 +26,14 @@ func connectDB() {
 		log.Fatal(err)
 	}
 
+	db = client.Database("pizzastore")
+
 	fmt.Println("Connected to MongoDB!")
+}
+
+func GetCollection() *mongo.Collection {
+	if db == nil {
+		log.Fatal("Database is not connected.")
+	}
+	return db.Collection("orders")
 }

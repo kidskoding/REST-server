@@ -1,6 +1,8 @@
 package main
 
 import (
+	"REST-server/models"
+	"REST-server/routes"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -15,12 +17,13 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", homePage)
+	myRouter.HandleFunc("/api/orders", routes.CreateOrder).Methods("POST")
 
-	fmt.Println("Server is running on port", port)
+	fmt.Printf("Server is running on http://localhost:%d", port)
 	http.ListenAndServe(fmt.Sprintf("localhost:%d", port), myRouter)
 }
 
 func main() {
-	connectDB()
+	models.ConnectToDB()
 	handleRequests()
 }
