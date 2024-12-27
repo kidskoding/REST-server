@@ -8,17 +8,13 @@ import (
 	"net/http"
 )
 
-func homePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "A REST server that tracks customers' pizza orders")
-}
-
 func handleRequests() {
 	port := 8080
 	myRouter := mux.NewRouter().StrictSlash(true)
 
-	myRouter.HandleFunc("/", homePage)
 	myRouter.HandleFunc("/api/orders", routes.CreateOrder).Methods("POST")
 	myRouter.HandleFunc("/api/orders/{id}", routes.ReadOrder).Methods("GET")
+	myRouter.HandleFunc("/api/orders/{id}", routes.UpdateOrder).Methods("PUT")
 
 	fmt.Printf("Server is running on http://localhost:%d", port)
 	http.ListenAndServe(fmt.Sprintf("localhost:%d", port), myRouter)
